@@ -1,0 +1,8 @@
+{
+  "modules" : [
+    { "name": "node_debugger" },
+    { "name": "js_profiler" }
+  ],
+  "extends": "shell",
+  "has_html": true
+}

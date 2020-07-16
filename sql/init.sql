@@ -1,0 +1,146 @@
+-- xnpp_dashboard
+DROP TABLE IF EXISTS `apps`;
+CREATE TABLE `apps`(
+  `id` INT UNSIGNED AUTO_INCREMENT,
+  `name` VARCHAR(25) NOT NULL,
+  `owner` VARCHAR(20) NOT NULL,
+  `secret` VARCHAR(50) NOT NULL,
+  `gm_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `gm_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`owner`, `name`),
+  INDEX (`owner`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `members`;
+CREATE TABLE `members`(
+  `id` INT UNSIGNED AUTO_INCREMENT,
+  `app_id` INT NOT NULL,
+  `work_id` VARCHAR(20) NOT NULL,
+  `status` INT NOT NULL,
+  `gm_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `gm_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`app_id`, `work_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user`(
+  `id` INT UNSIGNED AUTO_INCREMENT,
+  `work_id` VARCHAR(20) NOT NULL,
+  `user_name` VARCHAR(20) DEFAULT "",
+  `mail` VARCHAR(100) DEFAULT "",
+  `gm_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `gm_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`work_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `activity`;
+CREATE TABLE `activity`(
+  `id` INT UNSIGNED AUTO_INCREMENT,
+  `app_id` INT NOT NULL,
+  `agent_id` VARCHAR(50) NOT NULL,
+  `file_type` VARCHAR(50) NOT NULL,
+  `filename` VARCHAR(250) NOT NULL,
+  `path` VARCHAR(250) DEFAULT "",
+  `work_id` VARCHAR(20) NOT NULL,
+  `status` INT DEFAULT 0 COMMENT '0 未生成, 1 已生成未转储, 2 已转储',
+  `favor` INT DEFAULT 0,
+  `case_name` VARCHAR(100) DEFAULT "",
+  `case_link` VARCHAR(100) DEFAULT "",
+  `token` VARCHAR(50) DEFAULT "",
+  `gm_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `gm_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`app_id`, `agent_id`, `filename`, `path`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `coredump`;
+CREATE TABLE `coredump`(
+  `id` INT UNSIGNED AUTO_INCREMENT,
+  `app_id` INT NOT NULL,
+  `agent_id` VARCHAR(50) NOT NULL,
+  `core_filename` VARCHAR(250) DEFAULT "",
+  `core_path` VARCHAR(250) DEFAULT "",
+  `executable_filename` VARCHAR(250) DEFAULT "",
+  `executable_type` INT DEFAULT 0 COMMENT '0 oss, 1 runtime name',
+  `work_id` VARCHAR(20) NOT NULL,
+  `status` INT DEFAULT 0 COMMENT '0 未生成, 1 已生成未转储, 2 已转储',
+  `uuid` VARCHAR(50) NOT NULL,
+  `favor` INT DEFAULT 0,
+  `case_name` VARCHAR(100) DEFAULT "",
+  `case_link` VARCHAR(100) DEFAULT "",
+  `token` VARCHAR(50) DEFAULT "",
+  `gm_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `gm_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`uuid`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `strategies`;
+CREATE TABLE `strategies`(
+  `id` INT UNSIGNED AUTO_INCREMENT,
+  `app_id` INT NOT NULL,
+  `context_type` VARCHAR(50) NOT NULL,
+  `push_type` VARCHAR(5) NOT NULL,
+  `dsl` VARCHAR(150) NOT NULL,
+  `expr` VARCHAR(150) NOT NULL,
+  `status` INT DEFAULT 1 COMMENT '0 规则禁用, 1 规则启用',
+  `gm_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `gm_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX (`app_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `strategy_members`;
+CREATE TABLE `strategy_members`(
+  `id` INT UNSIGNED AUTO_INCREMENT,
+  `strategy_id` INT UNSIGNED NOT NULL,
+  `work_id` VARCHAR(20) NOT NULL,
+  `gm_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `gm_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX (`strategy_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `global_strategies`;
+CREATE TABLE `global_strategies`(
+  `id` INT UNSIGNED AUTO_INCREMENT,
+  `app_id` INT NOT NULL,
+  `context_type` VARCHAR(50) NOT NULL,
+  `push_type` VARCHAR(5) NOT NULL,
+  `dsl` VARCHAR(150) NOT NULL,
+  `expr` VARCHAR(150) NOT NULL,
+  `status` INT DEFAULT 1 COMMENT '0 规则禁用, 1 规则启用',
+  `gm_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `gm_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX (`app_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `global_strategy_members`;
+CREATE TABLE `global_strategy_members`(
+  `id` INT UNSIGNED AUTO_INCREMENT,
+  `strategy_id` INT UNSIGNED NOT NULL,
+  `work_id` VARCHAR(20) NOT NULL,
+  `gm_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `gm_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX (`strategy_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `package`;
+CREATE TABLE `package`(
+  `id` INT UNSIGNED AUTO_INCREMENT,
+  `app_id` INT NOT NULL,
+  `agent_id` VARCHAR(50) NOT NULL,
+  `package_name` VARCHAR(50) NOT NULL,
+  `package_path` VARCHAR(250) DEFAULT "",
+  `package_lock_path` VARCHAR(250) DEFAULT "",
+  `security_path` VARCHAR(250) DEFAULT "",
+  `gm_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `gm_create` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`app_id`, `agent_id`, `package_name`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

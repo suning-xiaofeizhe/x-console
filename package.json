@@ -1,0 +1,42 @@
+{
+    "name": "x-console",
+    "version": "0.0.1",
+    "description": "console for xnpp",
+    "main": "app.js",
+    "scripts": {
+        "app": "npm i --production && eggctl stop --title=x-console && eggctl start --workers=4 --port=3000 --title=x-console --daemon",
+        "dev": "egg-bin dev --port=6443",
+        "lint": "eslint app config scripts test *.js --fix",
+        "docs:dev": "vuepress dev docs",
+        "docs:build": "node scripts/build_xnpp_docs.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:suning-xiaofeizhe/x-console.git"
+    },
+    "keywords": [
+        "xnpp",
+        "console"
+    ],
+    "author": "hyj1991 <yeekwanvong@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "boolex": "^2.1.0",
+        "egg": "^2.23.0",
+        "egg-mysql": "^3.0.0",
+        "egg-redis": "^2.4.0",
+        "egg-scripts": "^2.11.0",
+        "egg-view-ejs": "^2.0.1",
+        "kitx": "^2.1.0",
+        "moment": "^2.24.0",
+        "p-map": "^3.0.0",
+        "uuid": "^3.3.3"
+    },
+    "devDependencies": {
+        "egg-bin": "^4.13.0",
+        "eslint": "^6.2.1",
+        "eslint-config-egg": "^7.4.1",
+        "vuepress": "^1.5.0"
+    }
+}
